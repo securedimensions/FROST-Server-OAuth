@@ -4,7 +4,7 @@
     <parent>
         <groupId>de.fraunhofer.iosb.ilt.FROST-Server</groupId>
         <artifactId>FROST-ServerParent</artifactId>
-        <version>2.2.0-SNAPSHOT</version>
+        <version>2.2.0</version>
     </parent>
     <groupId>de.securedimensions.FROST-Server</groupId>
     <artifactId>FROST-Server.Auth.OAuth2</artifactId>
@@ -27,6 +27,12 @@
         </dependency>
         <dependency>
             <groupId>${project.parent.groupId}</groupId>
+            <artifactId>FROST-Server.SQLjooq</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>${project.parent.groupId}</groupId>
             <artifactId>FROST-Server.Util</artifactId>
             <version>${project.parent.version}</version>
             <scope>provided</scope>
@@ -39,13 +45,11 @@
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
-            <version>8.0.1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-            <version>4.5.14</version>
         </dependency>
         <dependency>
             <groupId>org.glassfish</groupId>
@@ -55,7 +59,6 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>jul-to-slf4j</artifactId>
-            <version>${version.slf4j-api}</version>
             <scope>provided</scope>
         </dependency>
 

@@ -22,6 +22,7 @@ import de.fraunhofer.iosb.ilt.frostserver.settings.ConfigDefaults;
 import de.fraunhofer.iosb.ilt.frostserver.settings.CoreSettings;
 import de.fraunhofer.iosb.ilt.frostserver.settings.Settings;
 import de.fraunhofer.iosb.ilt.frostserver.settings.annotation.DefaultValue;
+import de.fraunhofer.iosb.ilt.frostserver.settings.annotation.DefaultValueBoolean;
 import de.fraunhofer.iosb.ilt.frostserver.settings.annotation.DefaultValueInt;
 import de.fraunhofer.iosb.ilt.frostserver.util.AuthProvider;
 import de.fraunhofer.iosb.ilt.frostserver.util.LiquibaseUser;
@@ -42,6 +43,7 @@ import org.slf4j.LoggerFactory;
  * A FROST Auth implementation for OAuth2 Authentication.
  */
 public class OAuth2AuthProvider implements AuthProvider, LiquibaseUser, ConfigDefaults {
+
     @DefaultValueInt(10)
     public static final String TAG_MAX_CLIENTS_PER_USER = "maxClientsPerUser";
     @DefaultValue("FROST-Server")
@@ -60,11 +62,22 @@ public class OAuth2AuthProvider implements AuthProvider, LiquibaseUser, ConfigDe
     @DefaultValue("n/a")
     public static final String TAG_ADMIN_UID = "adminUid";
 
+    @DefaultValueBoolean(false)
+    public static final String TAG_REGISTER_USER_LOCALLY = "registerUserLocally";
+
+    @DefaultValue("USERS")
+    public static final String TAG_USER_TABLE = "userTable";
+
+    @DefaultValue("USER_NAME")
+    public static final String TAG_USERNAME_COLUMN = "usernameColumn";
+
     private static final Logger LOGGER = LoggerFactory.getLogger(OAuth2AuthProvider.class);
     private final Map<String, UserClientInfo> clientidToUserinfo = new ConcurrentHashMap<>();
     private final Map<String, UserClientInfo> usernameToUserinfo = new ConcurrentHashMap<>();
     private CoreSettings coreSettings;
     private int maxClientsPerUser;
+    private boolean registerUserLocally;
+    private DatabaseHandler databaseHandler;
 
     private String adminUid;
     private TokenIntrospection tokenIntrospection;
@@ -78,6 +91,11 @@ public class OAuth2AuthProvider implements AuthProvider, LiquibaseUser, ConfigDe
         adminUid = authSettings.get(TAG_ADMIN_UID, getClass());
         LOGGER.info("OAuth2 Provider setting {}, set to value: {}", TAG_ADMIN_UID, adminUid);
         tokenIntrospection = new TokenIntrospection(authSettings);
+        registerUserLocally = authSettings.getBoolean(TAG_REGISTER_USER_LOCALLY, OAuth2AuthProvider.class);
+        if (registerUserLocally) {
+            DatabaseHandler.init(coreSettings);
+            databaseHandler = DatabaseHandler.getInstance(coreSettings);
+        }
     }
 
     @Override
@@ -121,6 +139,10 @@ public class OAuth2AuthProvider implements AuthProvider, LiquibaseUser, ConfigDe
         final PrincipalExtended userPrincipal = new PrincipalExtended(userData.userName, admin, userData.roles);
         final UserClientInfo userInfo = usernameToUserinfo.computeIfAbsent(userData.userName, t -> new UserClientInfo());
         userInfo.setUserPrincipal(userPrincipal);
+
+        if (registerUserLocally) {
+            databaseHandler.enureUserInUsertable(userData.userName);
+        }
 
         String oldClientId = userInfo.addClientId(clientId, maxClientsPerUser);
         if (oldClientId != null) {
