@@ -56,6 +56,9 @@ public class OAuth2AuthFilter implements Filter {
     private final Map<HttpMethod, AuthChecker> methodCheckers = new EnumMap<>(HttpMethod.class);
     private boolean allowAnonymous;
     private boolean authenticateOnly;
+    private boolean registerUserLocally;
+    private DatabaseHandler databaseHandler;
+
     private String authHeaderValue;
     private String adminUid;
     private TokenIntrospection tokenIntrospection;
@@ -99,6 +102,10 @@ public class OAuth2AuthFilter implements Filter {
         Settings authSettings = coreSettings.getAuthSettings();
         tokenIntrospection = new TokenIntrospection(authSettings);
         userInfo = new UserInfo(authSettings);
+        registerUserLocally = authSettings.getBoolean(TAG_REGISTER_USER_LOCALLY, OAuth2AuthProvider.class);
+        if (registerUserLocally) {
+            databaseHandler = DatabaseHandler.getInstance(coreSettings);
+        }
 
         String realmName = authSettings.get(TAG_AUTH_REALM_NAME, OAuth2AuthProvider.class);
         authHeaderValue = "Bearer realm=\"" + realmName + "\"";
@@ -311,6 +318,9 @@ public class OAuth2AuthFilter implements Filter {
             pe.addContextItem("Geolocation", geoLocation);
         }
 
+        if (registerUserLocally && userData != USER_DATA_NO_USER) {
+            databaseHandler.enureUserInUsertable(userName);
+        }
         if (authenticateOnly || (allowAnonymous && (HttpMethod.GET == method))) {
             RequestWrapper rw = new RequestWrapper(request, pe);
             chain.doFilter(rw, response);
