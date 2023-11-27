@@ -13,13 +13,44 @@ PrincipalExtended['UserInfo'] = <response from UserInfo>
 
 The result from the TokenInfo and UserInfo is cached in separate self-expiring ConcurrentHashMap instances. The cache timeout can be configured via `oauth.cacheExpires` with a default of 60 seconds.
 
-## Deployment
-The deployment of the STAplus plugin requires a working deployment of the FROST-Server and the STAplus plugin.
+## Deployment for existing FROST-Server
+The deployment of the OAuth2 plugin requires a working deployment of the FROST-Server.
 
 ### Build the OAuth2 plugin
-This repository builds with the FROST-Server 2.2.0 SNAPSHOT.
+This repository builds with the FROST-Server 2.2.0.
 
-The command `mvn install` produces the JAR file `FROST-Server.Auth.OAuth2-2.2.0-SNAPSHOT.jar`. Make sure you copy the JAR-file to the appropriate FROST-Server directory.
+Use `git clone https://github.com/securedimensions/FROST-Server-OAuth.git` to download the sources.
+
+Then `cd FROST-Server-OAuth` and use command `mvn install` to produce the JAR file `FROST-Server.Auth.OAuth2-2.2.0.jar`. Make sure you copy the JAR-file to the appropriate FROST-Server directory.
+
+## Deployment with FROST-Server
+Use `git clone -b v2.2.x https://github.com/FraunhoferIOSB/FROST-Server.git FROST-Server-v2.2.x` to create the FROST-Server directory structure.
+
+Then cd `FROST-Server-v2.2.x` and `git clone https://github.com/securedimensions/FROST-Server-OAuth.git FROST-Server.Auth.OAuth2`.
+
+Add the `OAuth2` plugin to the `FROST-Server-v2.2.x/pom.xml`.
+
+```xml
+    <modules>
+        <module>FROST-Server.MQTTP</module>
+        <module>FROST-Server.HTTP</module>
+        <module>FROST-Server.HTTP.Common</module>
+        <module>FROST-Server.MQTT</module>
+        <module>FROST-Server.MQTT.Moquette</module>
+        <module>FROST-Server.Core.Model</module>
+        <module>FROST-Server.Core</module>
+        <module>FROST-Server.SQLjooq</module>
+        <module>FROST-Server.Auth.Basic</module>
+        <module>FROST-Server.Auth.Keycloak</module>
+        <module>FROST-Server.Auth.OAuth2</module>
+        <module>FROST-Server.Util</module>
+        <module>Plugins</module>
+        <module>Tools</module>
+        <module>FROST-Server.Tests</module>
+    </modules>
+```
+
+Then follow the [FROST-Server documentation](https://fraunhoferiosb.github.io/FROST-Server/deployment/architecture-packages.html) applicable to your deployment strategy.  
 
 ## Settings
 You can enable this plugin in FROST-Server and configure the behavior by modifying the FROST-Server `context.xml` file.
