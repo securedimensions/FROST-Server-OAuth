@@ -91,7 +91,7 @@ To enforce simple role based authorization, it is possible to provide the role r
 ```
 
 ### Configure the user identifier that gets admin role
-Please add the `auth.adminUid` to the configuration. If using AUTHENIX for authentication, the REMOTE_USER is identified by a UUIDv3.
+Please add the `auth.adminUid` to the configuration. If using AUTHENIX for authentication, the REMOTE_USER is identified by a UUID.
 
 ```xml
 <Parameter override="false" name="auth.adminUid" value="<user identifier>" />
@@ -115,3 +115,11 @@ The `auth.oauth.cacheExpires` parameter allows to configure the timeout for the 
 <Parameter override="false" name="auth.oauth.cacheExpires" value="60" />
 ```
 
+### Configure local storage of Users
+To configure access rights per user, the following configuration options support the creation of users that are identified via this OAuth2 plugin:
+
+Use the boolean parameter `auth.registerUserLocally` to store user's in a database table. Defaults to `false`.
+
+Use the string parameter `auth.userTable` to configure the database table name. Defaults to `USERS`.
+
+Use the string parameter `auth.usernameColumn` to configure the column name that stores the user's identifier (`REMOTE_USER`). Defaults to `USER_NAME`.
