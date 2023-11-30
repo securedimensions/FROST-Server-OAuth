@@ -1,4 +1,4 @@
-# FROST-Server-OAuth Plugin
+# FROST-Server-OAuth2 Plugin
 This repository contains an OAuth2 / OpenID Connect authentication plugin for [FROST-Server](https://github.com/FraunhoferIOSB/FROST-Server) to be used in combination with the [STAplus](https://github.com/securedimensions/FROST-Server-PLUS) plugin.
 
 This plugin is tested with the Authorization Server [AUTHENIX](https://www.authenix.eu). 
@@ -19,14 +19,14 @@ The deployment of the OAuth2 plugin requires a working deployment of the FROST-S
 ### Build the OAuth2 plugin
 This repository builds with the FROST-Server 2.2.0.
 
-Use `git clone https://github.com/securedimensions/FROST-Server-OAuth.git` to download the sources.
+Use `git clone https://github.com/securedimensions/FROST-Server-OAuth2.git` to download the sources.
 
-Then `cd FROST-Server-OAuth` and use command `mvn install` to produce the JAR file `FROST-Server.Auth.OAuth2-2.2.0.jar`. Make sure you copy the JAR-file to the appropriate FROST-Server directory.
+Then `cd FROST-Server-OAuth2` and use command `mvn install` to produce the JAR file `FROST-Server.Auth.OAuth2-2.2.0.jar`. Make sure you copy the JAR-file to the appropriate FROST-Server directory.
 
 ## Deployment with FROST-Server
 Use `git clone -b v2.2.x https://github.com/FraunhoferIOSB/FROST-Server.git FROST-Server-v2.2.x` to create the FROST-Server directory structure.
 
-Then cd `FROST-Server-v2.2.x` and `git clone https://github.com/securedimensions/FROST-Server-OAuth.git FROST-Server.Auth.OAuth2`.
+Then cd `FROST-Server-v2.2.x` and `git clone https://github.com/securedimensions/FROST-Server-OAuth2.git FROST-Server.Auth.OAuth2`.
 
 Add the `OAuth2` plugin to the `FROST-Server-v2.2.x/pom.xml`.
 
