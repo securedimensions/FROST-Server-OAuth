@@ -1,6 +1,8 @@
 # FROST-Server-OAuth2 Plugin
 This repository contains an OAuth2 / OpenID Connect authentication plugin for [FROST-Server](https://github.com/FraunhoferIOSB/FROST-Server) to be used in combination with the [STAplus](https://github.com/securedimensions/FROST-Server-PLUS) plugin.
 
+The plugin supports OAuth2 Bearer Token as specified in [RFC 6749, §7.1](https://datatracker.ietf.org/doc/html/rfc6749#section-1.4).
+
 This plugin is tested with the Authorization Server [AUTHENIX](https://www.authenix.eu). 
 
 This plugin applies the `sub` value from the OAuth2 TokenInfo response as the `REMOTE_USER`. Technically, the plugin creates a FROST-Server `PrincipalExtended` and adds the entire response from the TokenInfo and UserInfo to the context:
