@@ -312,11 +312,6 @@ public class OAuth2AuthFilter implements Filter {
             Map<String, Object> ui = uiMapper.convertValue(userInformation, new TypeReference<Map<String, Object>>() {});
             pe.addContextItem("UserInfo", ui);
         }
-        /* Security Context processing */
-        String geoLocation = request.getHeader("Geolocation");
-        if (geoLocation != null) {
-            pe.addContextItem("Geolocation", geoLocation);
-        }
 
         if (registerUserLocally && userData != USER_DATA_NO_USER) {
             databaseHandler.enureUserInUsertable(userName);
