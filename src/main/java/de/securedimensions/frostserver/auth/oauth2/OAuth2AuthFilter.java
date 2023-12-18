@@ -229,7 +229,7 @@ public class OAuth2AuthFilter implements Filter {
 
         if (authHeader == null || !authHeader.startsWith(AUTH_SCHEME)) {
             if (allowAnonymous && (HttpMethod.GET == method)) {
-                return;
+                //continue;
             } else {
                 LOGGER.debug("No 'Bearer' auth header.");
                 if ((accept != null) && (accept.contains("text/html"))) {
