@@ -228,7 +228,9 @@ public class OAuth2AuthFilter implements Filter {
         JsonNode tokenInfo = null;
 
         if (authHeader == null || !authHeader.startsWith(AUTH_SCHEME)) {
-            if (!allowAnonymous && (HttpMethod.GET == method)) {
+            if (allowAnonymous && (HttpMethod.GET == method)) {
+                return;
+            } else {
                 LOGGER.debug("No 'Bearer' auth header.");
                 if ((accept != null) && (accept.contains("text/html"))) {
                     response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Authentication scheme 'Bearer' is required");
