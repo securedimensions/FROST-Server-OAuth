@@ -227,9 +227,20 @@ public class OAuth2AuthFilter implements Filter {
         String token = null;
         JsonNode tokenInfo = null;
 
+        AuthChecker checker = methodCheckers.get(method);
+        if (checker == null) {
+            LOGGER.debug("Rejecting request: No checker for method: {}.", request.getMethod());
+            if ((accept != null) && (accept.contains("text/html"))) {
+                response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED, "HTTP method rejected: No checker configured");
+            } else {
+                response.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+            }
+            return;
+        }
+
         if (authHeader == null || !authHeader.startsWith(AUTH_SCHEME)) {
-            if (allowAnonymous && (HttpMethod.GET == method)) {
-                //continue;
+            if (checker.isAllowed(USER_DATA_NO_USER, response)) {
+                ;//continue
             } else {
                 LOGGER.debug("No 'Bearer' auth header.");
                 if ((accept != null) && (accept.contains("text/html"))) {
@@ -321,17 +332,6 @@ public class OAuth2AuthFilter implements Filter {
         if (authenticateOnly || (allowAnonymous && (HttpMethod.GET == method))) {
             RequestWrapper rw = new RequestWrapper(request, pe);
             chain.doFilter(rw, response);
-            return;
-        }
-
-        AuthChecker checker = methodCheckers.get(method);
-        if (checker == null) {
-            LOGGER.debug("Rejecting request: No checker for method: {}.", request.getMethod());
-            if ((accept != null) && (accept.contains("text/html"))) {
-                response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED, "HTTP method rejected: No checker configured");
-            } else {
-                response.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
-            }
             return;
         }
 
