@@ -77,7 +77,7 @@ public class DatabaseHandler {
 
     private DatabaseHandler(CoreSettings coreSettings) {
         authSettings = coreSettings.getAuthSettings();
-        connectionUrl = authSettings.get(TAG_DB_URL, ConnectionUtils.class, false);
+        connectionUrl = authSettings.get(TAG_DB_URL, ConnectionUtils.class);
         userTable = authSettings.get(TAG_USER_TABLE, OAuth2AuthProvider.class);
         usernameColumn = authSettings.get(TAG_USERNAME_COLUMN, OAuth2AuthProvider.class);
     }
