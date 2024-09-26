@@ -18,6 +18,7 @@
 package de.securedimensions.frostserver.auth.oauth2;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import de.fraunhofer.iosb.ilt.frostserver.service.InitResult;
 import de.fraunhofer.iosb.ilt.frostserver.settings.ConfigDefaults;
 import de.fraunhofer.iosb.ilt.frostserver.settings.CoreSettings;
 import de.fraunhofer.iosb.ilt.frostserver.settings.Settings;
@@ -83,7 +84,7 @@ public class OAuth2AuthProvider implements AuthProvider, LiquibaseUser, ConfigDe
     private TokenIntrospection tokenIntrospection;
 
     @Override
-    public void init(CoreSettings coreSettings) {
+    public InitResult init(CoreSettings coreSettings) {
         this.coreSettings = coreSettings;
         final Settings authSettings = coreSettings.getAuthSettings();
         maxClientsPerUser = authSettings.getInt(TAG_MAX_CLIENTS_PER_USER, getClass());
@@ -96,6 +97,7 @@ public class OAuth2AuthProvider implements AuthProvider, LiquibaseUser, ConfigDe
             DatabaseHandler.init(coreSettings);
             databaseHandler = DatabaseHandler.getInstance(coreSettings);
         }
+        return InitResult.INIT_OK;
     }
 
     @Override
