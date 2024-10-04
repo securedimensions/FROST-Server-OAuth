@@ -45,9 +45,9 @@
             <version>${version.guava}</version>
         </dependency>
         <dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-web-api</artifactId>
-            <version>${version.javaee-web-api}</version>
+            <groupId>jakarta.platform</groupId>
+            <artifactId>jakarta.jakartaee-web-api</artifactId>
+            <version>${version.jakartaee-web-api}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
